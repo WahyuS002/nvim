@@ -34,6 +34,17 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+vim.keymap.set('n', '<leader>e', ':Lex 30<cr>')
+
+-- Make indent easier
+vim.keymap.set('v', '<', '<gv')
+vim.keymap.set('v', '>', '>gv')
+
+-- Move text up and down
+vim.keymap.set('v', '<A-j>', ':m .+1<CR>==')
+vim.keymap.set('v', '<A-k>', ':m .-2<CR>==')
+vim.keymap.set('v', 'p', '"_dP')
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -47,5 +58,12 @@ vim.api.nvim_create_autocmd('TextYankPost', {
         vim.highlight.on_yank()
     end,
 })
+
+-- Visual Block --
+-- Move text up and down
+vim.keymap.set('x', 'J', ":move '>+1<CR>gv-gv")
+vim.keymap.set('x', 'K', ":move '<-2<CR>gv-gv")
+vim.keymap.set('x', '<A-j>', ":move '>+1<CR>gv-gv")
+vim.keymap.set('x', '<A-k>', ":move '<-2<CR>gv-gv")
 
 -- vim: ts=2 sts=2 sw=2 et

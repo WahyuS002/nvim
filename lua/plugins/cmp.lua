@@ -39,9 +39,48 @@ return {
             -- See `:help cmp`
             local cmp = require 'cmp'
             local luasnip = require 'luasnip'
+            local kind_icons = {
+                Text = '',
+                Method = '󰆧',
+                Function = '󰊕',
+                Constructor = '',
+                Field = '󰇽',
+                Variable = '󰂡',
+                Class = '󰠱',
+                Interface = '',
+                Module = '',
+                Property = '󰜢',
+                Unit = '',
+                Value = '󰎠',
+                Enum = '',
+                Keyword = '󰌋',
+                Snippet = '',
+                Color = '󰏘',
+                File = '󰈙',
+                Reference = '',
+                Folder = '󰉋',
+                EnumMember = '',
+                Constant = '󰏿',
+                Struct = '',
+                Event = '',
+                Operator = '󰆕',
+                TypeParameter = '󰅲',
+            }
+
             luasnip.config.setup {}
 
             cmp.setup {
+                window = {
+                    completion = { -- rounded border; thin-style scrollbar
+                        border = 'rounded',
+                        scrollbar = true,
+                    },
+                    documentation = { -- no border; native-style scrollbar
+                        border = nil,
+                        scrollbar = '',
+                        -- other options
+                    },
+                },
                 snippet = {
                     expand = function(args)
                         luasnip.lsp_expand(args.body)
@@ -101,6 +140,23 @@ return {
                     -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
                     --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
                 },
+
+                formatting = {
+                    expandable_indicator = true,
+                    fields = { 'kind', 'abbr', 'menu' },
+                    format = function(entry, vim_item)
+                        -- Kind icons
+                        vim_item.kind = string.format('%s', kind_icons[vim_item.kind])
+                        -- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
+                        vim_item.menu = ({
+                            luasnip = '[Snippet]',
+                            buffer = '[Buffer]',
+                            path = '[Path]',
+                        })[entry.source.name]
+                        return vim_item
+                    end,
+                },
+
                 sources = {
                     { name = 'nvim_lsp' },
                     { name = 'luasnip' },
