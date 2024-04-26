@@ -2,9 +2,44 @@ return {
     { -- GitHub copilot
         'zbirenbaum/copilot.lua',
         cmd = 'Copilot',
+        build = ':Copilot auth',
         event = 'InsertEnter',
         config = function()
-            require('copilot').setup {}
+            require('copilot').setup {
+                suggestion = {
+                    enabled = false,
+                },
+                panel = {
+                    enabled = false,
+                },
+                filetypes = {
+                    yaml = false,
+                    markdown = true,
+                    help = false,
+                    gitcommit = false,
+                    gitrebase = false,
+                    hgcommit = false,
+                    svn = false,
+                    cvs = false,
+                    ['.'] = false,
+                    sh = function()
+                        if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), '^%.env.*') then
+                            -- disable for .env files
+                            return false
+                        end
+                        return true
+                    end,
+                },
+                copilot_node_command = 'node', -- Node.js version must be > 18.x
+                server_opts_overrides = {},
+            }
+        end,
+    },
+
+    {
+        'zbirenbaum/copilot-cmp',
+        config = function()
+            require('copilot_cmp').setup()
         end,
     },
 
@@ -56,6 +91,7 @@ return {
                 Field = '󰇽',
                 Variable = '󰂡',
                 Class = '󰠱',
+                Copilot = '',
                 Interface = '',
                 Module = '',
                 Property = '󰜢',
@@ -77,6 +113,14 @@ return {
             }
 
             luasnip.config.setup {}
+
+            local has_words_before = function()
+                if vim.api.nvim_buf_get_option(0, 'buftype') == 'prompt' then
+                    return false
+                end
+                local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+                return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match '^%s*$' == nil
+            end
 
             cmp.setup {
                 window = {
@@ -118,7 +162,15 @@ return {
                     -- If you prefer more traditional completion keymaps,
                     -- you can uncomment the following lines
                     ['<CR>'] = cmp.mapping.confirm { select = true },
-                    ['<Tab>'] = cmp.mapping.select_next_item(),
+
+                    ['<Tab>'] = vim.schedule_wrap(function(fallback)
+                        if cmp.visible() and has_words_before() then
+                            cmp.select_next_item { behavior = cmp.SelectBehavior.Select }
+                        else
+                            fallback()
+                        end
+                    end),
+
                     ['<S-Tab>'] = cmp.mapping.select_prev_item(),
 
                     -- Manually trigger a completion from nvim-cmp.
@@ -144,9 +196,6 @@ return {
                             luasnip.jump(-1)
                         end
                     end, { 'i', 's' }),
-
-                    -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
-                    --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
                 },
 
                 formatting = {
@@ -157,6 +206,7 @@ return {
                         vim_item.kind = string.format('%s', kind_icons[vim_item.kind])
                         -- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
                         vim_item.menu = ({
+                            copilot = '[Copilot]',
                             luasnip = '[Snippet]',
                             buffer = '[Buffer]',
                             path = '[Path]',
@@ -166,6 +216,8 @@ return {
                 },
 
                 sources = {
+                    -- copilot source
+                    { name = 'copilot' },
                     { name = 'nvim_lsp' },
                     { name = 'luasnip' },
                     { name = 'path' },
