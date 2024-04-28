@@ -54,7 +54,7 @@ require('lazy').setup({
 
     require 'plugins/treesitter',
 
-    require 'plugins/nvim-tree',
+    require 'plugins/neo-tree',
 
     require 'plugins/autopairs',
 
