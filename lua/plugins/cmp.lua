@@ -7,10 +7,17 @@ return {
         config = function()
             require('copilot').setup {
                 suggestion = {
-                    enabled = false,
-                },
-                panel = {
-                    enabled = false,
+                    enabled = true,
+                    auto_trigger = true,
+                    debounce = 75,
+                    keymap = {
+                        accept = '<Tab>',
+                        accept_word = false,
+                        accept_line = false,
+                        -- next = '<M-]>',
+                        -- prev = '<M-[>',
+                        -- dismiss = '<C-]>',
+                    },
                 },
                 filetypes = {
                     yaml = false,
@@ -22,13 +29,6 @@ return {
                     svn = false,
                     cvs = false,
                     ['.'] = false,
-                    sh = function()
-                        if string.match(vim.fs.basename(vim.api.nvim_buf_get_name(0)), '^%.env.*') then
-                            -- disable for .env files
-                            return false
-                        end
-                        return true
-                    end,
                 },
                 copilot_node_command = 'node', -- Node.js version must be > 18.x
                 server_opts_overrides = {},
@@ -36,12 +36,12 @@ return {
         end,
     },
 
-    {
-        'zbirenbaum/copilot-cmp',
-        config = function()
-            require('copilot_cmp').setup()
-        end,
-    },
+    -- {
+    --     'zbirenbaum/copilot-cmp',
+    --     config = function()
+    --         require('copilot_cmp').setup()
+    --     end,
+    -- },
 
     { -- Autocompletion
         'hrsh7th/nvim-cmp',
@@ -206,7 +206,7 @@ return {
                         vim_item.kind = string.format('%s', kind_icons[vim_item.kind])
                         -- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
                         vim_item.menu = ({
-                            copilot = '[Copilot]',
+                            -- copilot = '[Copilot]',
                             luasnip = '[Snippet]',
                             buffer = '[Buffer]',
                             path = '[Path]',
@@ -217,7 +217,7 @@ return {
 
                 sources = {
                     -- copilot source
-                    { name = 'copilot' },
+                    -- { name = 'copilot' },
                     { name = 'nvim_lsp' },
                     { name = 'luasnip' },
                     { name = 'path' },
