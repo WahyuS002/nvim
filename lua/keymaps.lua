@@ -1,6 +1,8 @@
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+local opts = { noremap = true, silent = true }
+
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -49,6 +51,9 @@ vim.keymap.set('n', '<S-h>', ':bprevious<CR>')
 
 -- Bufferline
 vim.keymap.set('n', '<leader>bd', ':bdelete!<CR>')
+vim.keymap.set('n', '<leader>bl', ':BufferLineCloseLeft<CR>')
+vim.keymap.set('n', '<leader>br', ':BufferLineCloseRight<CR>')
+vim.keymap.set('n', '<leader>bo', ':BufferLineCloseOthers<CR>')
 
 -- LSP keymaps
 vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<CR>')
