@@ -48,6 +48,8 @@ require('lazy').setup({
 
     require 'plugins/tokyonight',
 
+    require 'plugins/darkplus',
+
     require 'plugins/todo-comments',
 
     require 'plugins/mini',
@@ -57,6 +59,10 @@ require('lazy').setup({
     require 'plugins/neo-tree',
 
     require 'plugins/autopairs',
+
+    require 'plugins/autotag',
+
+    require 'plugins/trouble',
 
     -- The following two comments only work if you have downloaded the kickstart repo, not just copy pasted the
     -- init.lua. If you want these files, they are in the repository, so you can just download them and
