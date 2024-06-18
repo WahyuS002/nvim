@@ -5,6 +5,11 @@ local opts = { noremap = true, silent = true }
 
 -- My custom keymaps
 vim.keymap.set('n', '<leader>|', '<cmd>vsplit<cr>', { desc = 'Split window vertically' })
+vim.keymap.set('n', '<leader>i', ':Inspect<cr>', { desc = 'Inspect' })
+
+-- Set comfortable motion scroll keys
+vim.g.comfortable_motion_scroll_down_key = 'j'
+vim.g.comfortable_motion_scroll_up_key = 'k'
 
 -- Set highlight on search, but clear on pressing <Esc> in normal mode
 vim.opt.hlsearch = true
