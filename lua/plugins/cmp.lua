@@ -9,9 +9,9 @@ return {
                 suggestion = {
                     enabled = true,
                     auto_trigger = true,
-                    debounce = 75,
+                    -- debounce = 75,
                     keymap = {
-                        accept = '<Tab>',
+                        accept = '<S-Tab>',
                         accept_word = false,
                         accept_line = false,
                         -- next = '<M-]>',
@@ -62,13 +62,13 @@ return {
                 dependencies = {
                     -- `friendly-snippets` contains a variety of premade snippets.
                     --    See the README about individual language/framework/plugin snippets:
-                    --    https://github.com/rafamadriz/friendly-snippets
-                    -- {
-                    --   'rafamadriz/friendly-snippets',
-                    --   config = function()
-                    --     require('luasnip.loaders.from_vscode').lazy_load()
-                    --   end,
-                    -- },
+                    --    https://github.com/rafamadriz/friendly-snippets,
+                    {
+                        'rafamadriz/friendly-snippets',
+                        config = function()
+                            require('luasnip.loaders.from_vscode').lazy_load()
+                        end,
+                    },
                 },
             },
             'saadparwaiz1/cmp_luasnip',
@@ -121,6 +121,14 @@ return {
                 local line, col = unpack(vim.api.nvim_win_get_cursor(0))
                 return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match '^%s*$' == nil
             end
+
+            -- Setup up vim-dadbod
+            cmp.setup.filetype({ 'sql' }, {
+                sources = {
+                    { name = 'vim-dadbod-completion' },
+                    { name = 'buffer' },
+                },
+            })
 
             cmp.setup {
                 window = {
@@ -176,7 +184,7 @@ return {
                     -- Manually trigger a completion from nvim-cmp.
                     --  Generally you don't need this, because nvim-cmp will display
                     --  completions whenever it has completion options available.
-                    ['<C-Space>'] = cmp.mapping.complete {},
+                    ['<C-Space>'] = cmp.mapping.complete(),
 
                     -- Think of <c-l> as moving to the right of your snippet expansion.
                     --  So if you have a snippet that's like:
