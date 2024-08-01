@@ -2,8 +2,31 @@ return {
     { -- Highlight, edit, and navigate code
         'nvim-treesitter/nvim-treesitter',
         build = ':TSUpdate',
+        dependencies = {
+            'windwp/nvim-ts-autotag',
+        },
         opts = {
-            ensure_installed = { 'bash', 'c', 'html', 'lua', 'luadoc', 'markdown', 'vim', 'vimdoc' },
+            autopairs = { enable = true },
+            ensure_installed = {
+                -- defaults
+                'bash',
+                'vim',
+                'lua',
+                'luadoc',
+                'vimdoc',
+
+                -- web dev
+                'html',
+                'css',
+                'javascript',
+                'typescript',
+                'tsx',
+                'vue',
+                'markdown',
+                'markdown_inline',
+                'json',
+            },
+
             -- Autoinstall languages that are not installed
             auto_install = true,
             highlight = {
@@ -11,6 +34,7 @@ return {
                 -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
                 --  If you are experiencing weird indenting issues, add the language to
                 --  the list of additional_vim_regex_highlighting and disabled languages for indent.
+                disable = { 'latex' },
                 additional_vim_regex_highlighting = { 'ruby' },
             },
             indent = { enable = true, disable = { 'ruby' } },
@@ -22,6 +46,11 @@ return {
             require('nvim-treesitter.install').prefer_git = true
             ---@diagnostic disable-next-line: missing-fields
             require('nvim-treesitter.configs').setup(opts)
+            require('nvim-ts-autotag').setup {
+                did_setup = true,
+                enable = true,
+                filetypes = { 'html', 'xml', 'tsx' },
+            }
 
             -- There are additional nvim-treesitter modules that you can use to interact
             -- with nvim-treesitter. You should go explore a few and see what interests you:
