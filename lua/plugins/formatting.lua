@@ -19,6 +19,7 @@ return {
                 graphql = { 'prettier' },
                 lua = { 'stylua' },
                 python = { 'isort', 'black' },
+                sql = { 'sql-formatter' },
             },
             format_on_save = {
                 lsp_fallback = true,
@@ -36,4 +37,3 @@ return {
         end, { desc = 'Format file or range (in visual mode)' })
     end,
 }
-
